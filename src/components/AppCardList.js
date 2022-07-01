@@ -1,4 +1,4 @@
-import AppCard from "./AppCard"
+import AppCardListItem from "./AppCardListItem"
 
 function AppCardList({ dataItem }) {
   const data = dataItem.map((item, index) => {
@@ -9,7 +9,7 @@ function AppCardList({ dataItem }) {
   })
 
   return data.map((item) => {
-    return <AppCard dataItem={item} key={item.name} />
+    return <AppCardListItem dataItem={item} key={item.name} />
   })
 }
 
