@@ -1,4 +1,4 @@
-import AppSearch from "./AppSearch"
+import AppSearch from "../components/AppSearch"
 
 function TheHeader(props) {
   const search = {

@@ -1,7 +1,7 @@
-import TheHeader from "./components/TheHeader"
-import TheFooter from "./components/TheFooter"
-import AppCardList from "./components/AppCardList"
-import { robots } from "./data/robots"
+import TheHeader from "./TheHeader"
+import TheFooter from "./TheFooter"
+import AppScroll from "../components/AppScroll"
+import AppCardList from "../components/AppCardList"
 import React from "react"
 
 class App extends React.Component {
@@ -9,8 +9,24 @@ class App extends React.Component {
     super(props)
 
     this.state = {
-      robots: robots,
+      robots: [],
       searchField: "",
+    }
+  }
+
+  componentDidMount() {
+    this.fetchData()
+  }
+
+  async fetchData() {
+    try {
+      const res = await fetch("https://jsonplaceholder.typicode.com/users")
+
+      const data = await res.json()
+
+      this.setState({ robots: data })
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -30,10 +46,13 @@ class App extends React.Component {
   }
 
   render() {
-    const robotsFiltered = this.getRobotsFiltered(
-      this.state.robots,
-      this.state.searchField
-    )
+    const { robots, searchField } = this.state
+
+    const robotsFiltered = this.getRobotsFiltered(robots, searchField)
+
+    if (!robots.length) {
+      return <h3>Loading...</h3>
+    }
 
     return (
       <div className="container tc">
@@ -42,7 +61,9 @@ class App extends React.Component {
           searchChange={this.setSearch}
         />
         <main className="container__main">
-          <AppCardList dataItem={robotsFiltered} />
+          <AppScroll>
+            <AppCardList dataItem={robotsFiltered} />
+          </AppScroll>
         </main>
         <TheFooter className="container__footer" />
       </div>
