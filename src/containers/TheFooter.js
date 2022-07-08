@@ -1,5 +1,5 @@
 function TheFooter() {
-  return <footer>Robofriends - Learn React</footer>
+  return <footer>Learn React - Robofriends</footer>
 }
 
 export default TheFooter

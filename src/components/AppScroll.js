@@ -1,7 +1,7 @@
 function AppScroll(props) {
   const style = {
     overflowY: "scroll",
-    border: "1px solid black",
+    border: "1px solid lightgrey",
     height: "500px",
   }
 

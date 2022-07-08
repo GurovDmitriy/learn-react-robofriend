@@ -61,7 +61,7 @@ class App extends React.Component {
           className="container__header"
           searchChange={this.setSearch}
         />
-        <main className="container__main">
+        <main className="container__main mb3">
           <AppScroll>
             <ErrorBoundary>
               <AppCardList dataItem={robotsFiltered} />
