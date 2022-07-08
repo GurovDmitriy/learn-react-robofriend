@@ -1,5 +1,6 @@
 import TheHeader from "./TheHeader"
 import TheFooter from "./TheFooter"
+import ErrorBoundary from "./ErrorBoundary"
 import AppScroll from "../components/AppScroll"
 import AppCardList from "../components/AppCardList"
 import React from "react"
@@ -62,7 +63,9 @@ class App extends React.Component {
         />
         <main className="container__main">
           <AppScroll>
-            <AppCardList dataItem={robotsFiltered} />
+            <ErrorBoundary>
+              <AppCardList dataItem={robotsFiltered} />
+            </ErrorBoundary>
           </AppScroll>
         </main>
         <TheFooter className="container__footer" />
