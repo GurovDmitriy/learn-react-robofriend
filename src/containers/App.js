@@ -3,75 +3,66 @@ import TheFooter from "./TheFooter"
 import ErrorBoundary from "./ErrorBoundary"
 import AppScroll from "../components/AppScroll"
 import AppCardList from "../components/AppCardList"
-import React from "react"
+import React, { useState, useEffect } from "react"
 
-class App extends React.Component {
-  constructor(props) {
-    super(props)
+function App() {
+  const [robots, setRobots] = useState([])
+  const [searchValue, setSearchValue] = useState("")
 
-    this.state = {
-      robots: [],
-      searchField: "",
+  useEffect(() => {
+    async function setDataRobots() {
+      const data = await fetchDataRobots()
+      setRobots(data)
     }
+
+    setDataRobots()
+  }, [])
+
+  function setDataSearch(evt) {
+    const data = getValueSearch(evt)
+    setSearchValue(data)
   }
 
-  componentDidMount() {
-    this.fetchData()
-  }
-
-  async fetchData() {
+  async function fetchDataRobots() {
     try {
       const res = await fetch("https://jsonplaceholder.typicode.com/users")
 
-      const data = await res.json()
-
-      this.setState({ robots: data })
+      return await res.json()
     } catch (err) {
       console.log(err)
     }
   }
 
-  setSearch = (evt) => {
-    const searchValue = evt.target.value.toLowerCase()
-
-    this.setState({ searchField: searchValue })
+  function getValueSearch(evt) {
+    return evt.target.value.toLowerCase()
   }
 
-  getRobotsFiltered(arr, value) {
-    return arr.filter((item) => {
+  function getRobotsFiltered() {
+    return robots.filter((item) => {
       const name = item.name.toLowerCase()
-      const search = value.toLowerCase()
+      const search = searchValue.toLowerCase()
 
       return name.includes(search)
     })
   }
 
-  render() {
-    const { robots, searchField } = this.state
-
-    const robotsFiltered = this.getRobotsFiltered(robots, searchField)
-
-    if (!robots.length) {
-      return <h3>Loading...</h3>
-    }
-
-    return (
-      <div className="container tc">
-        <TheHeader
-          className="container__header"
-          searchChange={this.setSearch}
-        />
-        <main className="container__main mb3">
-          <AppScroll>
-            <ErrorBoundary>
-              <AppCardList dataItem={robotsFiltered} />
-            </ErrorBoundary>
-          </AppScroll>
-        </main>
-        <TheFooter className="container__footer" />
-      </div>
-    )
+  if (!robots.length) {
+    return <h3>Loading...</h3>
   }
+
+  return (
+    <div className="container tc">
+      <TheHeader className="container__header" searchChange={setDataSearch} />
+      <main className="container__main mb3">
+        <AppScroll>
+          <ErrorBoundary>
+            <AppCardList dataItem={getRobotsFiltered()} />
+          </ErrorBoundary>
+        </AppScroll>
+      </main>
+      <TheFooter className="container__footer" />
+    </div>
+  )
 }
 
 export default App
