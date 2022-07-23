@@ -3,39 +3,35 @@ import TheFooter from "./TheFooter"
 import ErrorBoundary from "./ErrorBoundary"
 import AppScroll from "../components/AppScroll"
 import AppCardList from "../components/AppCardList"
-import React, { useState, useEffect } from "react"
+import { useEffect } from "react"
+import { connect } from "react-redux"
 
-function App() {
-  const [robots, setRobots] = useState([])
-  const [searchValue, setSearchValue] = useState("")
+import { setSearchValue, fetchRobots } from "../actions"
 
+const mapStateToProps = (state) => {
+  return {
+    searchValue: state.reducerSearchValue.searchValue,
+    robots: state.reducerFetchRobots.robots,
+    isPending: state.reducerFetchRobots.isPending,
+    error: state.reducerFetchRobots.error,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setDataSearch: (evt) => dispatch(setSearchValue(evt.target.value)),
+    setDataRobots: () => dispatch(fetchRobots()),
+  }
+}
+
+function App(props) {
+  // state
+  const { searchValue, robots, setDataSearch, setDataRobots, isPending } = props
+
+  // hooks
   useEffect(() => {
-    async function setDataRobots() {
-      const data = await fetchDataRobots()
-      setRobots(data)
-    }
-
     setDataRobots()
   }, [])
-
-  function setDataSearch(evt) {
-    const data = getValueSearch(evt)
-    setSearchValue(data)
-  }
-
-  async function fetchDataRobots() {
-    try {
-      const res = await fetch("https://jsonplaceholder.typicode.com/users")
-
-      return await res.json()
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  function getValueSearch(evt) {
-    return evt.target.value.toLowerCase()
-  }
 
   function getRobotsFiltered() {
     return robots.filter((item) => {
@@ -46,7 +42,8 @@ function App() {
     })
   }
 
-  if (!robots.length) {
+  // render
+  if (isPending) {
     return <h3>Loading...</h3>
   }
 
@@ -65,4 +62,4 @@ function App() {
   )
 }
 
-export default App
+export default connect(mapStateToProps, mapDispatchToProps)(App)
