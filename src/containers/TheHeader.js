@@ -7,7 +7,7 @@ function TheHeader(props) {
 
   return (
     <div>
-      <h1>RoboFriends</h1>
+      <h1>RoboFriend</h1>
       <AppSearch dataItem={search} searchChange={props.searchChange} />
     </div>
   )
